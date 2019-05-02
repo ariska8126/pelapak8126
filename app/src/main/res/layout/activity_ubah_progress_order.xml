@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.UbahProgressOrderActivity">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgv_guestPhoto_upo"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginEnd="32dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_transKey_upo" />
+
+    <TextView
+        android:id="@+id/tv_transKey_upo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:text="ID Transaksi"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_namaGuest_upo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Konsumen"
+        app:layout_constraintStart_toStartOf="@+id/tv_transKey_upo"
+        app:layout_constraintTop_toBottomOf="@+id/tv_transKey_upo" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Proses Laundry:"
+        app:layout_constraintStart_toStartOf="@+id/tv_dateIN_upo"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dateIN_upo" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup_prosesCuci_upo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/textView17"
+        app:layout_constraintTop_toBottomOf="@+id/textView17">
+
+        <RadioButton
+            android:id="@+id/rdb_masukAntrian_upo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="rdbcuci"
+            android:text="Masuk Antrian" />
+
+        <RadioButton
+            android:id="@+id/rdb_sedangCuci_upo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="rdbcuci"
+            android:text="Sedang Dicuci" />
+
+        <RadioButton
+            android:id="@+id/rdb_sedangJemur_upo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="rdbcuci"
+            android:text="Sedang Dikeringkan" />
+
+        <RadioButton
+            android:id="@+id/rdb_sedangSetrika_upo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="rdbsetrika"
+            android:text="Sedang Disetrika" />
+
+        <RadioButton
+            android:id="@+id/rdb_cuciDone_upo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="rdbcuci"
+            android:text="Selesai" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btn_update_upo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="Update "
+        app:layout_constraintStart_toStartOf="@+id/guideline10"
+        app:layout_constraintTop_toTopOf="@+id/btn_cancel_upo" />
+
+    <Button
+        android:id="@+id/btn_cancel_upo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:text="@android:string/cancel"
+        app:layout_constraintEnd_toStartOf="@+id/guideline10"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup_prosesCuci_upo" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/tv_dateIN_upo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="DateIn"
+        app:layout_constraintStart_toStartOf="@+id/tv_namaGuest_upo"
+        app:layout_constraintTop_toBottomOf="@+id/tv_namaGuest_upo" />
+
+    <TextView
+        android:id="@+id/tv_layanan_upo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Layanan"
+        android:textStyle="italic"
+        app:layout_constraintStart_toEndOf="@+id/tv_namaGuest_upo"
+        app:layout_constraintTop_toTopOf="@+id/tv_namaGuest_upo" />
+</android.support.constraint.ConstraintLayout>

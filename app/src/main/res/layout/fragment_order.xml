@@ -3,14 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.FeedbackFragment">
+    tools:context=".Fragments.OrderFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_feedbak"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/default_padding"
-        android:layout_marginEnd="@dimen/default_padding"/>
 
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginEnd="@dimen/default_padding"
+        android:layout_marginStart="@dimen/default_padding"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:id="@+id/rv_order_ord"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </FrameLayout>

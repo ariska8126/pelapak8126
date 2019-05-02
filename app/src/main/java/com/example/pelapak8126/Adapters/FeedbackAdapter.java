@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.pelapak8126.Models.Feedback;
 import com.example.pelapak8126.R;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
@@ -24,7 +23,6 @@ public class FeedbackAdapter extends RecyclerView
     Context mContext;
     List<Feedback> mData;
 
-    FirebaseAuth mAuth;
     FirebaseUser currentUser;
 
     public FeedbackAdapter(Context mContext, List<Feedback> mData) {
@@ -45,10 +43,12 @@ public class FeedbackAdapter extends RecyclerView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        holder.tv_comment.setText(mData.get(position).getComment());
-        Glide.with(mContext).load(mData.get(position).getGuestPhotoUrl()).into(holder.imgv_guest_photo);
+        holder.tv_comment.setText(mData.get(position).getKomentar());
+        Glide.with(mContext).load(mData.get(position).getPhotoGuest())
+                .into(holder.imgv_guest_photo);
         holder.tv_nama_guest.setText(mData.get(position).getNamaGuest());
-
+        holder.tv_layanan.setText(mData.get(position).getLayanan());
+        holder.rb_feedback.setRating(mData.get(position).getRate());
     }
 
     @Override
@@ -58,7 +58,7 @@ public class FeedbackAdapter extends RecyclerView
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_nama_guest, tv_comment, tv_time;
+        TextView tv_nama_guest, tv_comment, tv_time, tv_layanan;
         RatingBar rb_feedback;
         ImageView imgv_guest_photo;
 
@@ -68,7 +68,8 @@ public class FeedbackAdapter extends RecyclerView
             tv_comment = itemView.findViewById(R.id.tv_comment_fbc);
             tv_time = itemView.findViewById(R.id.tv_time_fbc);
             tv_nama_guest = itemView.findViewById(R.id.tv_guest_name_fbc);
-            rb_feedback = itemView.findViewById(R.id.ratingBar);
+            tv_layanan = itemView.findViewById(R.id.tv_layanan_fbc);
+            rb_feedback = (RatingBar) itemView.findViewById(R.id.ratingBar_rate_fbc);
             imgv_guest_photo = itemView.findViewById(R.id.imgv_guest_photo_fbc);
         }
     }

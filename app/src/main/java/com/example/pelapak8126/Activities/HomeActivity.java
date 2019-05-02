@@ -30,6 +30,7 @@ import com.example.pelapak8126.Fragments.FeedbackFragment;
 import com.example.pelapak8126.Fragments.GuideFragment;
 import com.example.pelapak8126.Fragments.HomeFragment;
 import com.example.pelapak8126.Fragments.LayananFragment;
+import com.example.pelapak8126.Fragments.OrderFragment;
 import com.example.pelapak8126.Fragments.ProfileFragment;
 import com.example.pelapak8126.Models.LaundryService;
 import com.example.pelapak8126.R;
@@ -89,8 +90,8 @@ public class HomeActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent chatIntent = new Intent(HomeActivity.this, ChatActivity.class);
+                startActivity(chatIntent);
             }
         });
 
@@ -301,7 +302,15 @@ public class HomeActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, new AboutFragment()).commit();
 
-        } else if (id == R.id.nav_logout) {
+        }else if (id == R.id.nav_order) {
+
+            fab.setVisibility(INVISIBLE);
+            fab_service.setVisibility(INVISIBLE);
+            getSupportActionBar().setTitle("Cucian");
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, new OrderFragment()).commit();
+
+        }  else if (id == R.id.nav_logout) {
 
             FirebaseAuth.getInstance().signOut();
             Intent loginActivity = new Intent(getApplicationContext(), LoginActivity.class);

@@ -1,13 +1,17 @@
 package com.example.pelapak8126.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.example.pelapak8126.Activities.TerimaTolakOrderActivity;
 import com.example.pelapak8126.Models.RequestOrder;
 import com.example.pelapak8126.R;
 
@@ -36,10 +40,10 @@ public class RequestOrderAdapter extends RecyclerView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        holder.tv_setrika.setText(mData.get(position).getSetrika().toString());
-        holder.tv_namaLayanan.setText(mData.get(position).getPaketLayanan());
-        holder.tv_antarJemput.setText(mData.get(position).getAntarJemput().toString());
+        holder.tv_layanan.setText(mData.get(position).getPaketLayanan());
+        holder.tv_namaGuest.setText(mData.get(position).getNamaGuest());
         holder.tv_deskripsi.setText(mData.get(position).getDeskripsi());
+        Glide.with(mContext).load(mData.get(position).getPhotoGuest()).into(holder.img_photoGuest);
 
     }
 
@@ -50,16 +54,48 @@ public class RequestOrderAdapter extends RecyclerView
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_namaLayanan, tv_deskripsi, tv_antarJemput, tv_setrika, tv_pewangi;
+        TextView tv_layanan, tv_deskripsi, tv_namaGuest, tv_timeStamp;
+        ImageView img_photoGuest;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            tv_antarJemput = itemView.findViewById(R.id.tv_antarJemput_rro);
-            tv_deskripsi = itemView.findViewById(R.id.tv_deskripsi_rro);
-            tv_namaLayanan = itemView.findViewById(R.id.tv_pakat_layanan_rro);
-            tv_pewangi = itemView.findViewById(R.id.tv_pewangi_rro);
-            tv_setrika = itemView.findViewById(R.id.tv_setrika_rro);
+            tv_layanan = itemView.findViewById(R.id.tv_layanan_rro);
+            tv_namaGuest = itemView.findViewById(R.id.tv_namaGuest_rro);
+            tv_timeStamp = itemView.findViewById(R.id.tv_timeStamp_rro);
+            tv_deskripsi = itemView.findViewById(R.id.tv_desc_rro);
+            img_photoGuest = itemView.findViewById(R.id.imgv_guest_rro);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent tetoOrder = new Intent(mContext, TerimaTolakOrderActivity.class);
+                    int position = getAdapterPosition();
+
+                    tetoOrder.putExtra("namaPelapak", mData.get(position).getNamaPelapak());
+                    tetoOrder.putExtra("photoGuest", mData.get(position).getPhotoGuest());
+                    tetoOrder.putExtra("longitudeLaundry", mData.get(position).getLongitudeLaundry());
+                    tetoOrder.putExtra("latitudeLaundry", mData.get(position).getLatitudeLaundry());
+                    tetoOrder.putExtra("longitudeGuest", mData.get(position).getLongitudeGuest());
+                    tetoOrder.putExtra("latitudeGuest", mData.get(position).getLatitudeGuest());
+
+                    tetoOrder.putExtra("namaGuest", mData.get(position).getNamaGuest());
+                    tetoOrder.putExtra("idGuest", mData.get(position).getIdGuest());
+                    tetoOrder.putExtra("idLaundry", mData.get(position).getIdLaundry());
+                    tetoOrder.putExtra("setrika", mData.get(position).getSetrika());
+                    tetoOrder.putExtra("antarjemput", mData.get(position).getAntarJemput());
+//                    tetoOrder.putExtra("timeStamp", mData.get(position).getDeskripsi());
+                    tetoOrder.putExtra("deskripsi", mData.get(position).getDeskripsi());
+                    tetoOrder.putExtra("layanan", mData.get(position).getPaketLayanan());
+                    tetoOrder.putExtra("requestOrderKey", mData.get(position).getOrderKey());
+                    tetoOrder.putExtra("photoPelapak", mData.get(position).getPhotoPelapak());
+                    tetoOrder.putExtra("alamatPelapak", mData.get(position).getAlamatPelapak());
+                    tetoOrder.putExtra("namaLaundry", mData.get(position).getNamaLaundry());
+
+                    mContext.startActivity(tetoOrder);
+
+                }
+            });
 
         }
     }

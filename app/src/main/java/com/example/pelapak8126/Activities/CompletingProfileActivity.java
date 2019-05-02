@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.pelapak8126.Models.Distance;
 import com.example.pelapak8126.Models.OwnerLaundry;
 import com.example.pelapak8126.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -155,8 +156,8 @@ public class CompletingProfileActivity extends AppCompatActivity {
                                             edt_nama_laundry.getText().toString(),
                                             edt_alamat.getText().toString(),
                                             edt_phone.getText().toString(),
-                                            latitude.toString(),
-                                            longitude.toString(),
+                                            latitude,
+                                            longitude,
                                             rate,
                                             statusJemput.toString(),
                                             statusBuka.toString(),
@@ -166,8 +167,15 @@ public class CompletingProfileActivity extends AppCompatActivity {
                                             imageDownloadLink
                                     );
 
+//                                    Distance distance = new Distance(currentUser.getPhotoUrl().toString(),
+//                                            currentUser.getDisplayName(),
+//                                            currentUser.getUid(),
+//                                            rate, edt_alamat.getText().toString()
+//                                    );
+
                                     //save to database
                                     simpanProfile(ownerLaundry);
+//                                    simpanDistance(distance);
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -194,6 +202,11 @@ public class CompletingProfileActivity extends AppCompatActivity {
         });
 
     }
+//distance
+//    private void simpanDistance(Distance distance) {
+//
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//    }
 
     private void showMessage(String message) {
 
@@ -261,6 +274,9 @@ public class CompletingProfileActivity extends AppCompatActivity {
                             }
                         })
                         .create().show();
+
+                pb_fetch.setVisibility(View.INVISIBLE);
+                fetch.setVisibility(View.VISIBLE);
 
             } else {
                 // No explanation needed; request the permission

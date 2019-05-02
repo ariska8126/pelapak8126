@@ -7,8 +7,8 @@ public class OwnerLaundry {
     private String namaLaundry;
     private String alamat;
     private String phone;
-    private String latitude;
-    private String longitude;
+    private double latitude;
+    private double longitude;
     private Float rate;
     private String statusJemput;
     private String statusBuka;
@@ -22,7 +22,7 @@ public class OwnerLaundry {
     }
 
     public OwnerLaundry(String userId, String namaLaundry, String alamat, String phone,
-                        String latitude, String longitude, Float rate,
+                        double latitude, double longitude, Float rate,
                         String statusJemput, String statusBuka, String ownerEmail,
                         String ownerName, String ownerPhoto, String laundryPhoto) {
         this.userId = userId;
@@ -80,19 +80,19 @@ public class OwnerLaundry {
         this.phone = phone;
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 

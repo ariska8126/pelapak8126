@@ -45,7 +45,6 @@ public class FeedbackFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    //new
     RecyclerView recyclerView;
     FeedbackAdapter feedbackAdapter;
 
@@ -92,16 +91,16 @@ public class FeedbackFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View feedbackView = inflater.inflate(R.layout.fragment_feedback, container, false);
+        View feedbackView = inflater.inflate(R.layout.fragment_feedback,
+                container, false);
         recyclerView = feedbackView.findViewById(R.id.rv_feedbak);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        feedbackReference = firebaseDatabase.getReference("OwnerLaundry");
+        feedbackReference = firebaseDatabase.getReference("Feedback");
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-
 
         return feedbackView;
     }
@@ -111,7 +110,8 @@ public class FeedbackFragment extends Fragment {
         super.onStart();
 
         //get list post
-        feedbackReference.orderByChild("userId").equalTo(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
+        feedbackReference.orderByChild("idLaundry").equalTo(currentUser.getUid())
+                .addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 

@@ -30,7 +30,8 @@ public class ServiceAdapter extends RecyclerView
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
-        View row = LayoutInflater.from(mContext).inflate(R.layout.row_post_service, viewGroup, false);
+        View row = LayoutInflater.from(mContext).inflate(R.layout.row_post_service,
+                viewGroup, false);
 
         return new MyViewHolder(row);
     }

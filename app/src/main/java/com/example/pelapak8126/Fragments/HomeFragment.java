@@ -10,9 +10,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
+import com.bumptech.glide.Glide;
 import com.example.pelapak8126.Adapters.RequestOrderAdapter;
 import com.example.pelapak8126.Adapters.ServiceAdapter;
+import com.example.pelapak8126.Models.Distance;
 import com.example.pelapak8126.Models.LaundryService;
 import com.example.pelapak8126.Models.RequestOrder;
 import com.example.pelapak8126.R;
@@ -23,6 +31,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.snapshot.ChildKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,11 +61,27 @@ public class HomeFragment extends Fragment {
 
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
+    DatabaseReference laundryPelapak;
+    DatabaseReference distanceReference;
+
 
     FirebaseAuth auth;
     FirebaseUser user;
 
+    ToggleButton toggleButton, tgb_anjem;
+    Boolean toggleButtoState;
+
+    TextView tv_statusBuka;
+
+    //test
+    TextView tv_path;
+
     List<RequestOrder> requestOrderList;
+    List<Distance> distanceList;
+    TextView tv_username, tv_email;
+    ImageView imgv_user;
+    String statusBuka, antarJemput;
+    Switch sw_clop;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -116,7 +141,7 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View requestOrderView = inflater.inflate(R.layout.fragment_home, container, false);
@@ -130,6 +155,127 @@ public class HomeFragment extends Fragment {
 
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
+
+        laundryPelapak = firebaseDatabase.getReference("OwnerLaundry").child(user.getUid());
+
+        distanceReference = firebaseDatabase.getReference(" Distance");
+
+        tv_username = requestOrderView.findViewById(R.id.tv_uname_fh);
+        tv_email = requestOrderView.findViewById(R.id.tv_emaul_fh);
+
+        imgv_user = requestOrderView.findViewById(R.id.imgv_user_fh);
+
+        Glide.with(this).load(user.getPhotoUrl()).into(imgv_user);
+        tv_email.setText(user.getEmail());
+        tv_username.setText(user.getDisplayName());
+
+        //test
+        tv_path = requestOrderView.findViewById(R.id.tv_path_fh);
+
+        toggleButton = requestOrderView.findViewById(R.id.toggleButton);
+        tgb_anjem = requestOrderView.findViewById(R.id.tgb_anjem_fh);
+
+//        toggleButtoState = toggleButton.isChecked();
+
+        //update buka tutup
+        laundryPelapak.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+
+                statusBuka = dataSnapshot.child("statusBuka").getValue().toString();
+                antarJemput = dataSnapshot.child("statusJemput").getValue().toString();
+
+                if (statusBuka.equals("buka")){
+
+                    toggleButton.setChecked(true);
+                } else {
+
+                   toggleButton.setChecked(false);
+                }
+
+                if (antarJemput.equals("anjem")){
+
+                    tgb_anjem.setChecked(true);
+                } else {
+
+                    tgb_anjem.setChecked(false);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (toggleButton.isChecked()){
+
+                    laundryPelapak.child("statusBuka").setValue("buka");
+
+                    //distance
+                    distanceReference.orderByChild("idLaundry").equalTo(user.getUid())
+                            .addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    distanceList = new ArrayList<>();
+                                    for (DataSnapshot lapakSnapshot: dataSnapshot.getChildren()){
+                                        Distance distance = lapakSnapshot.getValue(Distance.class);
+                                        distance.setStatusBuka("buka");
+                                        distanceList.add(distance);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
+
+                } else {
+                    laundryPelapak.child("statusBuka").setValue("tutup");
+                    //distance
+                    distanceReference.orderByChild("idLaundry").equalTo(user.getUid())
+                            .addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    distanceList = new ArrayList<>();
+                                    for (DataSnapshot lapakSnapshot: dataSnapshot.getChildren()){
+                                        Distance distance = lapakSnapshot.getValue(Distance.class);
+                                        distance.setStatusBuka("tutup");
+                                        distanceList.add(distance);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
+                }
+            }
+        });
+
+        tgb_anjem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (tgb_anjem.isChecked()){
+
+                    laundryPelapak.child("statusJemput").setValue("anjem");
+
+                } else {
+                    laundryPelapak.child("statusJemput").setValue("tidak");
+
+                }
+            }
+        });
+
+
 
         return requestOrderView;
     }

@@ -31,17 +31,17 @@ import com.google.firebase.storage.UploadTask;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    ImageView imgV_userPhoto;
+
+
+    private EditText edt_namaPemilik, edt_emailAddress,
+            edt_password, edt_password2;
+    private ImageView imgV_userPhoto;
+    private Button btn_registerUser;
+    private ProgressBar loadingProgressBar_register;
+    private FirebaseAuth mAuth;
+    Uri pickedImageUri;
     static int REQUESTCODE = 1;
     static int PReqCode = 1;
-
-    private EditText edt_namaPemilik, edt_emailAddress, edt_password, edt_password2;
-    private ProgressBar loadingProgressBar_register;
-    private Button btn_registerUser;
-
-    Uri pickedImageUri;
-
-    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -2,42 +2,87 @@ package com.example.pelapak8126.Models;
 
 public class Feedback {
 
-    private String uIdLaundry;
-    private String uIdGuest;
-    private String namaGuest;
-    private String rate;
-    private String comment;
-    private String guestPhotoUrl;
-    private String feedBackKey;
-    private Object timeStamp;
+    String idLaundry;
+    String layanan;
+    Float rate;
+    String komentar;
+    String transkey;
+    String idGuest;
+    String photoGuest;
+    String namaGuest;
+    Object timeStamp;
+    String feebackKey;
 
-    public Feedback(String uIdLaundry, String uIdGuest, String namaGuest,
-                    String rate, String comment, String guestPhotoUrl) {
-        this.uIdLaundry = uIdLaundry;
-        this.uIdGuest = uIdGuest;
-        this.namaGuest = namaGuest;
+    public Feedback(String idLaundry, String layanan, Float rate, String komentar,
+                    String transkey, String idGuest, String photoGuest, String namaGuest) {
+
+        this.idLaundry = idLaundry;
+        this.layanan = layanan;
         this.rate = rate;
-        this.comment = comment;
-        this.guestPhotoUrl = guestPhotoUrl;
+        this.komentar = komentar;
+        this.transkey = transkey;
+        this.idGuest = idGuest;
+        this.photoGuest = photoGuest;
+        this.namaGuest = namaGuest;
     }
 
     public Feedback() {
     }
 
-    public String getuIdLaundry() {
-        return uIdLaundry;
+    public String getIdLaundry() {
+        return idLaundry;
     }
 
-    public void setuIdLaundry(String uIdLaundry) {
-        this.uIdLaundry = uIdLaundry;
+    public void setIdLaundry(String idLaundry) {
+        this.idLaundry = idLaundry;
     }
 
-    public String getuIdGuest() {
-        return uIdGuest;
+    public String getLayanan() {
+        return layanan;
     }
 
-    public void setuIdGuest(String uIdGuest) {
-        this.uIdGuest = uIdGuest;
+    public void setLayanan(String layanan) {
+        this.layanan = layanan;
+    }
+
+    public Float getRate() {
+        return rate;
+    }
+
+    public void setRate(Float rate) {
+        this.rate = rate;
+    }
+
+    public String getKomentar() {
+        return komentar;
+    }
+
+    public void setKomentar(String komentar) {
+        this.komentar = komentar;
+    }
+
+    public String getTranskey() {
+        return transkey;
+    }
+
+    public void setTranskey(String transkey) {
+        this.transkey = transkey;
+    }
+
+    public String getIdGuest() {
+        return idGuest;
+    }
+
+    public void setIdGuest(String idGuest) {
+        this.idGuest = idGuest;
+    }
+
+    public String getPhotoGuest() {
+        return photoGuest;
+    }
+
+    public void setPhotoGuest(String photoGuest) {
+        this.photoGuest = photoGuest;
     }
 
     public String getNamaGuest() {
@@ -48,38 +93,6 @@ public class Feedback {
         this.namaGuest = namaGuest;
     }
 
-    public String getRate() {
-        return rate;
-    }
-
-    public void setRate(String rate) {
-        this.rate = rate;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public String getGuestPhotoUrl() {
-        return guestPhotoUrl;
-    }
-
-    public void setGuestPhotoUrl(String guestPhotoUrl) {
-        this.guestPhotoUrl = guestPhotoUrl;
-    }
-
-    public String getFeedBackKey() {
-        return feedBackKey;
-    }
-
-    public void setFeedBackKey(String feedBackKey) {
-        this.feedBackKey = feedBackKey;
-    }
-
     public Object getTimeStamp() {
         return timeStamp;
     }
@@ -87,4 +100,13 @@ public class Feedback {
     public void setTimeStamp(Object timeStamp) {
         this.timeStamp = timeStamp;
     }
+
+    public String getFeebackKey() {
+        return feebackKey;
+    }
+
+    public void setFeebackKey(String feebackKey) {
+        this.feebackKey = feebackKey;
+    }
+
 }

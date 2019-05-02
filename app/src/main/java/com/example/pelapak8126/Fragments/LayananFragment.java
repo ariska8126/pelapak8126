@@ -118,7 +118,8 @@ public class LayananFragment extends Fragment {
 
                 for (DataSnapshot laundryservicesnap: dataSnapshot.getChildren()){
 
-                    LaundryService laundryService = laundryservicesnap.getValue(LaundryService.class);
+                    LaundryService laundryService = laundryservicesnap
+                            .getValue(LaundryService.class);
                     laundryServiceList.add(laundryService);
                 }
 

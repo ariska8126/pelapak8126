@@ -11,8 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.pelapak8126.Adapters.ProfileOwnerAdapter;
-import com.example.pelapak8126.Models.OwnerLaundry;
+import com.example.pelapak8126.Adapters.TransaksiAdapter;
+import com.example.pelapak8126.Models.Transaksi;
 import com.example.pelapak8126.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,12 +28,12 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ProfileFragment.OnFragmentInteractionListener} interface
+ * {@link OrderFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ProfileFragment#newInstance} factory method to
+ * Use the {@link OrderFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileFragment extends Fragment {
+public class OrderFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -45,17 +45,14 @@ public class ProfileFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    RecyclerView recyclerView;
-    ProfileOwnerAdapter profileOwnerAdapter;
+    //recyclerview
+    RecyclerView rv_order;
+    TransaksiAdapter transaksiAdapter;
+    DatabaseReference transReff;
+    FirebaseUser user;
+    List<Transaksi> transaksiList;
 
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference profileReference;
-    FirebaseAuth mAuth;
-    FirebaseUser currentUser;
-
-    List<OwnerLaundry> ownerLaundryList;
-
-    public ProfileFragment() {
+    public OrderFragment() {
         // Required empty public constructor
     }
 
@@ -65,11 +62,11 @@ public class ProfileFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
+     * @return A new instance of fragment OrderFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
+    public static OrderFragment newInstance(String param1, String param2) {
+        OrderFragment fragment = new OrderFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -91,49 +88,46 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View profileView = inflater.inflate(R.layout.fragment_profile,
+        View fragmentView = inflater.inflate(R.layout.fragment_order,
                 container, false);
-        recyclerView = profileView.findViewById(R.id.rv_profile);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setHasFixedSize(true);
 
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        profileReference = firebaseDatabase.getReference("OwnerLaundry");
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
+        rv_order = fragmentView.findViewById(R.id.rv_order_ord);
+        rv_order.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rv_order.setHasFixedSize(true);
 
-        return profileView;
+        transReff = FirebaseDatabase.getInstance().getReference("Transaksi");
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        return fragmentView;
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
-        //get list post
-        profileReference.orderByChild("userId").equalTo(currentUser.getUid())
+        transReff.orderByChild("idLaundry").equalTo(user.getUid())
                 .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                        ownerLaundryList = new ArrayList<>();
+                transaksiList = new ArrayList<>();
 
-                        for (DataSnapshot ownerlaundrysnap: dataSnapshot.getChildren()){
+                for (DataSnapshot transSnap: dataSnapshot.getChildren()){
 
-                            OwnerLaundry ownerLaundry = ownerlaundrysnap.getValue(OwnerLaundry.class);
-                            ownerLaundryList.add(ownerLaundry);
-                        }
+                    Transaksi transaksi = transSnap.getValue(Transaksi.class);
+                    transaksiList.add(transaksi);
+                }
 
-                        profileOwnerAdapter = new ProfileOwnerAdapter(getActivity(),
-                                ownerLaundryList);
-                        recyclerView.setAdapter(profileOwnerAdapter);
-                    }
+                transaksiAdapter = new TransaksiAdapter(getActivity(), transaksiList);
+                rv_order.setAdapter(transaksiAdapter);
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
 
-                    }
-                });
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -146,6 +140,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
 
     }
 

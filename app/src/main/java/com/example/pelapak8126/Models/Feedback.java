@@ -10,7 +10,7 @@ public class Feedback {
     String idGuest;
     String photoGuest;
     String namaGuest;
-    Object timeStamp;
+    String timeStamp;
     String feebackKey;
 
     public Feedback(String idLaundry, String layanan, Float rate, String komentar,
@@ -93,11 +93,11 @@ public class Feedback {
         this.namaGuest = namaGuest;
     }
 
-    public Object getTimeStamp() {
+    public String getTimeStamp() {
         return timeStamp;
     }
 
-    public void setTimeStamp(Object timeStamp) {
+    public void setTimeStamp(String timeStamp) {
         this.timeStamp = timeStamp;
     }
 

@@ -22,8 +22,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -115,6 +119,8 @@ public class OrderFragment extends Fragment {
                 for (DataSnapshot transSnap: dataSnapshot.getChildren()){
 
                     Transaksi transaksi = transSnap.getValue(Transaksi.class);
+                    Long timeStamp = Long.valueOf(transaksi.getTimeStamp());
+                    transaksi.setTimeStamp(getDate(timeStamp));
                     transaksiList.add(transaksi);
                 }
 
@@ -128,6 +134,23 @@ public class OrderFragment extends Fragment {
 
             }
         });
+    }
+
+    private String getDate(Long timeStamp) {
+
+        try {
+            Calendar calendar = Calendar.getInstance();
+            TimeZone timeZone = TimeZone.getDefault();
+            calendar.setTimeInMillis(timeStamp*1000);
+            calendar.add(Calendar.MILLISECOND, timeZone.getOffset(calendar.getTimeInMillis()));
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            Date date = (Date) calendar.getTime();
+            return sdf.format(date);
+        }catch (Exception e){
+
+        }
+        return "";
     }
 
     // TODO: Rename method, update argument and hook method into UI event

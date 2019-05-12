@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.pelapak8126.Adapters.ProfileOwnerAdapter;
-import com.example.pelapak8126.Models.OwnerLaundry;
+import com.example.pelapak8126.Models.Pelapak;
 import com.example.pelapak8126.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -53,7 +53,7 @@ public class ProfileFragment extends Fragment {
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
 
-    List<OwnerLaundry> ownerLaundryList;
+    List<Pelapak> pelapakList;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -115,16 +115,16 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                        ownerLaundryList = new ArrayList<>();
+                        pelapakList = new ArrayList<>();
 
                         for (DataSnapshot ownerlaundrysnap: dataSnapshot.getChildren()){
 
-                            OwnerLaundry ownerLaundry = ownerlaundrysnap.getValue(OwnerLaundry.class);
-                            ownerLaundryList.add(ownerLaundry);
+                            Pelapak pelapak = ownerlaundrysnap.getValue(Pelapak.class);
+                            pelapakList.add(pelapak);
                         }
 
                         profileOwnerAdapter = new ProfileOwnerAdapter(getActivity(),
-                                ownerLaundryList);
+                                pelapakList);
                         recyclerView.setAdapter(profileOwnerAdapter);
                     }
 

@@ -49,6 +49,7 @@ public class FeedbackAdapter extends RecyclerView
         holder.tv_nama_guest.setText(mData.get(position).getNamaGuest());
         holder.tv_layanan.setText(mData.get(position).getLayanan());
         holder.rb_feedback.setRating(mData.get(position).getRate());
+        holder.tv_time.setText(mData.get(position).getTimeStamp());
     }
 
     @Override

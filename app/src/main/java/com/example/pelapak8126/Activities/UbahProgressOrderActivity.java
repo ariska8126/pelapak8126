@@ -1,6 +1,7 @@
 package com.example.pelapak8126.Activities;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,8 +14,16 @@ import android.widget.Toast;
 import com.example.pelapak8126.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class UbahProgressOrderActivity extends AppCompatActivity {
 
@@ -23,7 +32,7 @@ public class UbahProgressOrderActivity extends AppCompatActivity {
     private Button btn_cancel, btn_update;
     private TextView tv_orderKey, tv_namaGuest, tv_dateIn, tv_layanan;
 
-    private String key, layanan;
+    private String key, layanan, namaGuest, timeStamp;
     private String cuciValue;
 
     FirebaseUser user;
@@ -36,11 +45,6 @@ public class UbahProgressOrderActivity extends AppCompatActivity {
 
         //get intent value
         key = getIntent().getExtras().getString("orderKey");
-        layanan = getIntent().getExtras().getString("layanan");
-
-        //firebase
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        transReff = FirebaseDatabase.getInstance().getReference("Transaksi");
 
         //init view
         tv_orderKey = findViewById(R.id.tv_transKey_upo);
@@ -53,18 +57,36 @@ public class UbahProgressOrderActivity extends AppCompatActivity {
 
         rdg_cuci = findViewById(R.id.radioGroup_prosesCuci_upo);
 
-        //bind intent to view
-        tv_orderKey.setText(key);
-        tv_layanan.setText(layanan);
+        //firebase
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        transReff = FirebaseDatabase.getInstance().getReference("Transaksi").child(key);
+
+        transReff.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                layanan = dataSnapshot.child("layanan").getValue().toString();
+                namaGuest = dataSnapshot.child("namaGuest").getValue().toString();
+                Long timeStamp = Long.valueOf(dataSnapshot.child("timeStamp").getValue().toString());
+                tv_orderKey.setText(key);
+                tv_layanan.setText(layanan);
+                tv_namaGuest.setText(namaGuest);
+                tv_dateIn.setText(getDate(timeStamp));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         //radiogrup init set value
-
         //onclick
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                transReff.child(key).child("proses").setValue(cuciValue);
+                transReff.child("proses").setValue(cuciValue);
 
                 Toast.makeText(UbahProgressOrderActivity.this, "perubahan berhasil di simpan!", Toast.LENGTH_SHORT).show();
                 updateUI();
@@ -80,6 +102,23 @@ public class UbahProgressOrderActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private String getDate(Long timeStamp) {
+
+        try {
+            Calendar calendar = Calendar.getInstance();
+            TimeZone timeZone = TimeZone.getDefault();
+            calendar.setTimeInMillis(timeStamp*1000);
+            calendar.add(Calendar.MILLISECOND, timeZone.getOffset(calendar.getTimeInMillis()));
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            Date date = (Date) calendar.getTime();
+            return sdf.format(date);
+        }catch (Exception e){
+
+        }
+        return "";
     }
 
     public void rdbcuci(View v){

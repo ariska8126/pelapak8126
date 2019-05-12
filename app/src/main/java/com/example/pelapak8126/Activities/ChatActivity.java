@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.pelapak8126.Adapters.ChatAdapter;
 import com.example.pelapak8126.Models.Chat;
 import com.example.pelapak8126.R;
@@ -35,7 +36,7 @@ public class ChatActivity extends AppCompatActivity {
     FirebaseUser user;
     DatabaseReference chatReference;
 
-    String userId, photoLaundry;
+    String userId, photoGuest, namaGuest;
 
     ChatAdapter chatAdapter;
     List<Chat> mData;
@@ -49,6 +50,8 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        getSupportActionBar().hide();
 
         chatReference = FirebaseDatabase.getInstance().getReference("Chat");
 
@@ -65,9 +68,14 @@ public class ChatActivity extends AppCompatActivity {
         rv_chat.setLayoutManager(linearLayoutManager);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
+        //get intent
+        userId = getIntent().getExtras().getString("idGuest");
+        photoGuest = getIntent().getExtras().getString("photoGuest");
+        namaGuest = getIntent().getExtras().getString("namaGuest");
 
-        //sementara
-        userId = "C9qOsxNUmmUjwYKvlYrnw93qnZ83";
+        Glide.with(this).load(photoGuest).into(imgv_photoUser);
+        tv_userName.setText(namaGuest);
+
 
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override

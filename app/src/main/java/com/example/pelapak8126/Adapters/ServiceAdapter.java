@@ -42,7 +42,6 @@ public class ServiceAdapter extends RecyclerView
         holder.tvNamaLayanan.setText(mData.get(position).getNamaLayanan());
         holder.tvDesc.setText(mData.get(position).getDeskripsi());
         holder.tvBiaya.setText(mData.get(position).getBiayaPerkilo());
-        Glide.with(mContext).load(mData.get(position).getUserPhoto()).into(holder.imgv_user_photo);
     }
 
     @Override
@@ -53,7 +52,6 @@ public class ServiceAdapter extends RecyclerView
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvNamaLayanan, tvDesc, tvBiaya;
-        ImageView imgv_user_photo;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -61,7 +59,6 @@ public class ServiceAdapter extends RecyclerView
             tvBiaya = itemView.findViewById(R.id.tv_biaya_rps);
             tvDesc = itemView.findViewById(R.id.tv_desc_rps);
             tvNamaLayanan = itemView.findViewById(R.id.tv_nama_layanan_rps);
-            imgv_user_photo = itemView.findViewById(R.id.imgv_user_photo_rps);
 
         }
     }

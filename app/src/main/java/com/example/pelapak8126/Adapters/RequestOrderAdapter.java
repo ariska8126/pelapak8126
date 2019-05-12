@@ -43,6 +43,8 @@ public class RequestOrderAdapter extends RecyclerView
         holder.tv_layanan.setText(mData.get(position).getPaketLayanan());
         holder.tv_namaGuest.setText(mData.get(position).getNamaGuest());
         holder.tv_deskripsi.setText(mData.get(position).getDeskripsi());
+        holder.tv_timeStamp.setText(mData.get(position).getTimeStamp());
+        holder.tv_status.setText(mData.get(position).getStatus());
         Glide.with(mContext).load(mData.get(position).getPhotoGuest()).into(holder.img_photoGuest);
 
     }
@@ -54,15 +56,16 @@ public class RequestOrderAdapter extends RecyclerView
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_layanan, tv_deskripsi, tv_namaGuest, tv_timeStamp;
+        TextView tv_layanan, tv_deskripsi, tv_namaGuest, tv_timeStamp, tv_status;
         ImageView img_photoGuest;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            tv_status = itemView.findViewById(R.id.tv_status_rrr);
             tv_layanan = itemView.findViewById(R.id.tv_layanan_rro);
             tv_namaGuest = itemView.findViewById(R.id.tv_namaGuest_rro);
-            tv_timeStamp = itemView.findViewById(R.id.tv_timeStamp_rro);
+            tv_timeStamp = itemView.findViewById(R.id.tv_alamat_rro);
             tv_deskripsi = itemView.findViewById(R.id.tv_desc_rro);
             img_photoGuest = itemView.findViewById(R.id.imgv_guest_rro);
 
@@ -78,13 +81,12 @@ public class RequestOrderAdapter extends RecyclerView
                     tetoOrder.putExtra("latitudeLaundry", mData.get(position).getLatitudeLaundry());
                     tetoOrder.putExtra("longitudeGuest", mData.get(position).getLongitudeGuest());
                     tetoOrder.putExtra("latitudeGuest", mData.get(position).getLatitudeGuest());
-
                     tetoOrder.putExtra("namaGuest", mData.get(position).getNamaGuest());
                     tetoOrder.putExtra("idGuest", mData.get(position).getIdGuest());
                     tetoOrder.putExtra("idLaundry", mData.get(position).getIdLaundry());
                     tetoOrder.putExtra("setrika", mData.get(position).getSetrika());
                     tetoOrder.putExtra("antarjemput", mData.get(position).getAntarJemput());
-//                    tetoOrder.putExtra("timeStamp", mData.get(position).getDeskripsi());
+                    tetoOrder.putExtra("timeStamp", mData.get(position).getTimeStamp());
                     tetoOrder.putExtra("deskripsi", mData.get(position).getDeskripsi());
                     tetoOrder.putExtra("layanan", mData.get(position).getPaketLayanan());
                     tetoOrder.putExtra("requestOrderKey", mData.get(position).getOrderKey());

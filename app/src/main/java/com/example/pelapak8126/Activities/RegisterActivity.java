@@ -31,8 +31,6 @@ import com.google.firebase.storage.UploadTask;
 
 public class RegisterActivity extends AppCompatActivity {
 
-
-
     private EditText edt_namaPemilik, edt_emailAddress,
             edt_password, edt_password2;
     private ImageView imgV_userPhoto;
@@ -90,6 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
             }
+
         });
 
         imgV_userPhoto.setOnClickListener(new View.OnClickListener() {
@@ -158,7 +157,8 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
 
                         //uri contain image url
-                        UserProfileChangeRequest profileUpadate = new UserProfileChangeRequest.Builder()
+                        UserProfileChangeRequest profileUpadate =
+                                new UserProfileChangeRequest.Builder()
                                 .setDisplayName(name).setPhotoUri(uri).build();
 
                         currentUser.updateProfile(profileUpadate).addOnCompleteListener(new OnCompleteListener<Void>() {

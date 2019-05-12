@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.pelapak8126.Models.OwnerLaundry;
+import com.example.pelapak8126.Models.Pelapak;
 import com.example.pelapak8126.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,11 +21,11 @@ public class ProfileOwnerAdapter extends RecyclerView
         .Adapter<ProfileOwnerAdapter.MyViewHolder> {
 
     Context mContext;
-    List<OwnerLaundry> mData;
+    List<Pelapak> mData;
 
     FirebaseUser currentUser;
 
-    public ProfileOwnerAdapter(Context mContext, List<OwnerLaundry> mData) {
+    public ProfileOwnerAdapter(Context mContext, List<Pelapak> mData) {
         this.mContext = mContext;
         this.mData = mData;
     }

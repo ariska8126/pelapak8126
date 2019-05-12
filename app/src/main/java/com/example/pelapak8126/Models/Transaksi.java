@@ -19,7 +19,7 @@ public class Transaksi {
     String photoPelapak;
     String alamatPelapak;
     String namaLaundry;
-    Object timeStamp;
+    String timeStamp;
     Float berat;
     int biaya;
     String proses;
@@ -33,7 +33,7 @@ public class Transaksi {
                      String namaGuest, String idGuest, String idLaundry, String setrika,
                      String antarjemput, String deskripsi, String layanan, String transKey,
                      String photoPelapak, String alamatPelapak, String namaLaundry,
-                     String proses) {
+                     String timeStamp, String proses) {
         this.namaPelapak = namaPelapak;
         this.photoGuest = photoGuest;
         this.longitudeLaundry = longitudeLaundry;
@@ -51,6 +51,7 @@ public class Transaksi {
         this.photoPelapak = photoPelapak;
         this.alamatPelapak = alamatPelapak;
         this.namaLaundry = namaLaundry;
+        this.timeStamp = timeStamp;
         this.proses = proses;
     }
 
@@ -190,11 +191,11 @@ public class Transaksi {
         this.namaLaundry = namaLaundry;
     }
 
-    public Object getTimeStamp() {
+    public String getTimeStamp() {
         return timeStamp;
     }
 
-    public void setTimeStamp(Object timeStamp) {
+    public void setTimeStamp(String timeStamp) {
         this.timeStamp = timeStamp;
     }
 

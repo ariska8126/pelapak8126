@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.pelapak8126.Fragments.AboutFragment;
+import com.example.pelapak8126.Fragments.ChatListFragment;
 import com.example.pelapak8126.Fragments.FeedbackFragment;
 import com.example.pelapak8126.Fragments.GuideFragment;
 import com.example.pelapak8126.Fragments.HomeFragment;
@@ -90,8 +91,12 @@ public class HomeActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent chatIntent = new Intent(HomeActivity.this, ChatActivity.class);
-                startActivity(chatIntent);
+
+//                Intent chatIntent = new Intent(HomeActivity.this, ChatActivity.class);
+//                startActivity(chatIntent);
+                fab.setVisibility(INVISIBLE);
+                getSupportActionBar().setTitle("Pesan Masuk");
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, new ChatListFragment()).commit();
             }
         });
 

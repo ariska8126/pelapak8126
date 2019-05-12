@@ -33,8 +33,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.snapshot.ChildKey;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -117,7 +121,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
         databaseReference.orderByChild("idLaundry").equalTo(user.getUid())
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -125,8 +128,16 @@ public class HomeFragment extends Fragment {
                         requestOrderList = new ArrayList<>();
                         for (DataSnapshot reqOrSnap: dataSnapshot.getChildren()) {
 
+
                             RequestOrder requestOrder = reqOrSnap.getValue(RequestOrder.class);
-                            requestOrderList.add(requestOrder);
+
+                            Long timeStamp = Long.valueOf(requestOrder.getTimeStamp());
+                            requestOrder.setTimeStamp(getDate(timeStamp));
+                            if (requestOrder.getStatus().equals("Menunggu Konfirmasi")){
+
+                                requestOrderList.add(requestOrder);
+                            }
+
                         }
 
                         requestOrderAdapter = new RequestOrderAdapter(getActivity(), requestOrderList);
@@ -138,6 +149,23 @@ public class HomeFragment extends Fragment {
 
                     }
                 });
+    }
+
+    private String getDate(Long timeStamp) {
+
+        try {
+            Calendar calendar = Calendar.getInstance();
+            TimeZone timeZone = TimeZone.getDefault();
+            calendar.setTimeInMillis(timeStamp*1000);
+            calendar.add(Calendar.MILLISECOND, timeZone.getOffset(calendar.getTimeInMillis()));
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            Date date = (Date) calendar.getTime();
+            return sdf.format(date);
+        }catch (Exception e){
+
+        }
+        return "";
     }
 
     @Override
@@ -168,9 +196,6 @@ public class HomeFragment extends Fragment {
         Glide.with(this).load(user.getPhotoUrl()).into(imgv_user);
         tv_email.setText(user.getEmail());
         tv_username.setText(user.getDisplayName());
-
-        //test
-        tv_path = requestOrderView.findViewById(R.id.tv_path_fh);
 
         toggleButton = requestOrderView.findViewById(R.id.toggleButton);
         tgb_anjem = requestOrderView.findViewById(R.id.tgb_anjem_fh);

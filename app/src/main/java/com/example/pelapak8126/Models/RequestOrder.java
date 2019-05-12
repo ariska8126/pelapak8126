@@ -24,7 +24,7 @@ public class RequestOrder {
     String status;
 
     String orderKey;
-    Object timeStamp;
+    String timeStamp;
 
     public RequestOrder() {
 
@@ -200,11 +200,11 @@ public class RequestOrder {
         this.orderKey = orderKey;
     }
 
-    public Object getTimeStamp() {
+    public String getTimeStamp() {
         return timeStamp;
     }
 
-    public void setTimeStamp(Object timeStamp) {
+    public void setTimeStamp(String timeStamp) {
         this.timeStamp = timeStamp;
     }
 }

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.pelapak8126.Activities.UbahProgressOrderActivity;
 import com.example.pelapak8126.Models.Transaksi;
 import com.example.pelapak8126.R;
@@ -38,19 +39,12 @@ public class TransaksiAdapter extends RecyclerView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-
-        //next update
-//        holder.tv_orderKey.setText(mData.get(position).getTransaksiKey());
-//        holder.tv_layanan.setText(mData.get(position).getLayanan());
-//        holder.tv_guestname.setText(mData.get(position).getNamaGuest());
-//        holder.tv_desc.setText(mData.get(position).getDeskripsi());
-
-        //trial
-        holder.tv_orderKey.setText(mData.get(position).getTransKey());
+        holder.namaGuest.setText(mData.get(position).getNamaGuest());
         holder.tv_layanan.setText(mData.get(position).getLayanan());
-        holder.tv_guestname.setText(mData.get(position).getIdGuest());
+        holder.tv_time.setText(mData.get(position).getTimeStamp());
         holder.tv_desc.setText(mData.get(position).getDeskripsi());
-
+        holder.tv_status.setText(mData.get(position).getProses());
+        Glide.with(mContext).load(mData.get(position).getPhotoGuest()).into(holder.imgv_guestPhoto);
 
     }
 
@@ -61,16 +55,17 @@ public class TransaksiAdapter extends RecyclerView
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_orderKey, tv_layanan, tv_guestname, tv_desc;
+        TextView namaGuest, tv_layanan, tv_time, tv_desc, tv_status;
         ImageView imgv_guestPhoto;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tv_desc = itemView.findViewById(R.id.tv_desc_rro);
-            tv_guestname = itemView.findViewById(R.id.tv_timeStamp_rro);
+            tv_time = itemView.findViewById(R.id.tv_alamat_rro);
             tv_layanan = itemView.findViewById(R.id.tv_layanan_rro);
-            tv_orderKey = itemView.findViewById(R.id.tv_namaGuest_rro);
+            namaGuest = itemView.findViewById(R.id.tv_namaGuest_rro);
+            tv_status = itemView.findViewById(R.id.tv_status_rowo);
 
             imgv_guestPhoto = itemView.findViewById(R.id.imgv_guest_rro);
 
@@ -82,9 +77,6 @@ public class TransaksiAdapter extends RecyclerView
                     int position = getAdapterPosition();
 
                     ubahProgresOrder.putExtra("orderKey", mData.get(position).getTransKey());
-                    ubahProgresOrder.putExtra("namaGuest", mData.get(position).getNamaGuest());
-                    ubahProgresOrder.putExtra("layanan", mData.get(position).getLayanan());
-
                     mContext.startActivity(ubahProgresOrder);
 
                 }

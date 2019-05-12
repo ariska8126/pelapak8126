@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/bg_style_popup">
+    android:background="@drawable/bg_style_popup"
+    android:layout_marginBottom="8dp">
 
     <TextView
         android:id="@+id/tv_namaGuest_rro"
@@ -13,30 +14,34 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:text="TextView"
+        android:text="nama guest"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/imgv_guest_rro"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_timeStamp_rro"
+        android:id="@+id/tv_alamat_rro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
+        android:text="time stamp"
         app:layout_constraintStart_toStartOf="@+id/tv_namaGuest_rro"
         app:layout_constraintTop_toBottomOf="@+id/tv_namaGuest_rro" />
 
     <TextView
         android:id="@+id/tv_layanan_rro"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="TextView"
+        android:layout_marginEnd="8dp"
+        android:text="layanan"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/tv_timeStamp_rro"
-        app:layout_constraintTop_toTopOf="@+id/tv_timeStamp_rro" />
+        app:layout_constraintEnd_toStartOf="@+id/imgv_guest_rro"
+        app:layout_constraintStart_toEndOf="@+id/textView18"
+        app:layout_constraintTop_toTopOf="@+id/tv_alamat_rro" />
 
     <TextView
         android:id="@+id/tv_desc_rro"
@@ -45,12 +50,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="deskripsi"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tv_timeStamp_rro"
-        app:layout_constraintTop_toBottomOf="@+id/tv_timeStamp_rro" />
+        app:layout_constraintStart_toStartOf="@+id/tv_alamat_rro"
+        app:layout_constraintTop_toBottomOf="@+id/tv_alamat_rro" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline8"
@@ -73,8 +76,42 @@
         android:layout_marginEnd="16dp"
         android:scaleType="centerCrop"
         android:src="@mipmap/ic_launcher"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_timeStamp_rro"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_alamat_rro"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_namaGuest_rro" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="#2e2e2e"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_desc_rro" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="|"
+        app:layout_constraintStart_toEndOf="@+id/tv_alamat_rro"
+        app:layout_constraintTop_toTopOf="@+id/tv_alamat_rro" />
+
+    <TextView
+        android:id="@+id/tv_status_rowo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="status laundry"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/view3"
+        app:layout_constraintStart_toStartOf="@+id/view3"
+        app:layout_constraintTop_toBottomOf="@+id/view3" />
 
 </android.support.constraint.ConstraintLayout>

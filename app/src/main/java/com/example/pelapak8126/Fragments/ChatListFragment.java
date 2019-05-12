@@ -11,8 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.pelapak8126.Adapters.FeedbackAdapter;
-import com.example.pelapak8126.Models.Feedback;
+import com.example.pelapak8126.Adapters.ChatAdapter;
+import com.example.pelapak8126.Adapters.ChatListAdapter;
+import com.example.pelapak8126.Models.NewChatList;
 import com.example.pelapak8126.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,22 +23,27 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.SimpleTimeZone;
 import java.util.TimeZone;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FeedbackFragment.OnFragmentInteractionListener} interface
+ * {@link ChatListFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FeedbackFragment#newInstance} factory method to
+ * Use the {@link ChatListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FeedbackFragment extends Fragment {
+public class ChatListFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -50,16 +56,12 @@ public class FeedbackFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     RecyclerView recyclerView;
-    FeedbackAdapter feedbackAdapter;
+    ChatListAdapter chatListAdapter;
+    List<NewChatList> newChatLists;
+    FirebaseUser user;
+    DatabaseReference chatListReference;
 
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference feedbackReference;
-    FirebaseAuth mAuth;
-    FirebaseUser currentUser;
-
-    List<Feedback> feedbackList;
-
-    public FeedbackFragment() {
+    public ChatListFragment() {
         // Required empty public constructor
     }
 
@@ -69,11 +71,11 @@ public class FeedbackFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FeedbackFragment.
+     * @return A new instance of fragment ChatListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static FeedbackFragment newInstance(String param1, String param2) {
-        FeedbackFragment fragment = new FeedbackFragment();
+    public static ChatListFragment newInstance(String param1, String param2) {
+        ChatListFragment fragment = new ChatListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -95,44 +97,39 @@ public class FeedbackFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View feedbackView = inflater.inflate(R.layout.fragment_feedback,
+        View view = inflater.inflate(R.layout.fragment_chat_list,
                 container, false);
-        recyclerView = feedbackView.findViewById(R.id.rv_feedbak);
+
+        recyclerView = view.findViewById(R.id.rv_incomingChat_cl);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
 
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        feedbackReference = firebaseDatabase.getReference("Feedback");
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        chatListReference = FirebaseDatabase.getInstance()
+                .getReference("NewUserChat").child(user.getUid());
 
-        return feedbackView;
+        return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        //get list post
-        feedbackReference.orderByChild("idLaundry").equalTo(currentUser.getUid())
-                .addValueEventListener(new ValueEventListener() {
+        chatListReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                newChatLists = new ArrayList<>();
+                newChatLists.clear();
+                for (DataSnapshot listSnap: dataSnapshot.getChildren()){
 
-                feedbackList = new ArrayList<>();
-                feedbackList.clear();
+                    NewChatList newChatList = listSnap.getValue(NewChatList.class);
 
-                for (DataSnapshot feedbacksnap: dataSnapshot.getChildren()){
+                    Long timeStamp = Long.valueOf(newChatList.getTimeStamp());
+                    newChatList.setTimeStamp(getDate(timeStamp));
 
-                    Feedback feedback = feedbacksnap.getValue(Feedback.class);
-
-                    Long timeStamp = Long.valueOf(feedback.getTimeStamp());
-                    feedback.setTimeStamp(getDate(timeStamp));
-                    feedbackList.add(feedback);
+                    newChatLists.add(newChatList);
                 }
-
-                feedbackAdapter = new FeedbackAdapter(getActivity(), feedbackList);
-                recyclerView.setAdapter(feedbackAdapter);
+                chatListAdapter = new ChatListAdapter(getActivity(), newChatLists);
+                recyclerView.setAdapter(chatListAdapter);
             }
 
             @Override
@@ -140,7 +137,6 @@ public class FeedbackFragment extends Fragment {
 
             }
         });
-
     }
 
     private String getDate(Long timeStamp) {
@@ -150,7 +146,6 @@ public class FeedbackFragment extends Fragment {
             TimeZone timeZone = TimeZone.getDefault();
             calendar.setTimeInMillis(timeStamp*1000);
             calendar.add(Calendar.MILLISECOND, timeZone.getOffset(calendar.getTimeInMillis()));
-//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             Date date = (Date) calendar.getTime();
             return sdf.format(date);

@@ -4,4 +4,14 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="hint">#B1B0B0</color>
+    <color name="backgroundgrey300">#E0E0E0</color>
+    <color name="backgroundgrey200">#EEEEEE</color>
+    <color name="backgroundgorange200">#FFAB91</color>
+    <color name="backgroundgorange300">#FF8A65</color>
+    <color name="backgroundgorange500">#FF5722</color>
+    <color name="backgroundgorange900">#BF360C</color>
+
+
+
+
 </resources>

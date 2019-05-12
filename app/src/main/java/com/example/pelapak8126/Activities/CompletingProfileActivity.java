@@ -21,8 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.pelapak8126.Models.Distance;
-import com.example.pelapak8126.Models.OwnerLaundry;
+import com.example.pelapak8126.Models.Pelapak;
 import com.example.pelapak8126.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -152,7 +151,7 @@ public class CompletingProfileActivity extends AppCompatActivity {
                                     String imageDownloadLink = uri.toString();
 
                                     //create post object
-                                    OwnerLaundry ownerLaundry = new OwnerLaundry(currentUser.getUid(),
+                                    Pelapak pelapak = new Pelapak(currentUser.getUid(),
                                             edt_nama_laundry.getText().toString(),
                                             edt_alamat.getText().toString(),
                                             edt_phone.getText().toString(),
@@ -167,14 +166,8 @@ public class CompletingProfileActivity extends AppCompatActivity {
                                             imageDownloadLink
                                     );
 
-//                                    Distance distance = new Distance(currentUser.getPhotoUrl().toString(),
-//                                            currentUser.getDisplayName(),
-//                                            currentUser.getUid(),
-//                                            rate, edt_alamat.getText().toString()
-//                                    );
-
                                     //save to database
-                                    simpanProfile(ownerLaundry);
+                                    simpanProfile(pelapak);
 //                                    simpanDistance(distance);
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
@@ -202,11 +195,6 @@ public class CompletingProfileActivity extends AppCompatActivity {
         });
 
     }
-//distance
-//    private void simpanDistance(Distance distance) {
-//
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//    }
 
     private void showMessage(String message) {
 
@@ -214,17 +202,17 @@ public class CompletingProfileActivity extends AppCompatActivity {
 
     }
 
-    private void simpanProfile(OwnerLaundry ownerLaundry) {
+    private void simpanProfile(Pelapak pelapak) {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("OwnerLaundry");
 
         //get owner uniqe ID and update owner key
         String key = myRef.getKey();
-        ownerLaundry.setOwnerKey(key);
+        pelapak.setOwnerKey(key);
 
         //add owner
-        myRef.child(currentUser.getUid()).setValue(ownerLaundry).addOnSuccessListener(new OnSuccessListener<Void>() {
+        myRef.child(currentUser.getUid()).setValue(pelapak).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
 
@@ -279,15 +267,14 @@ public class CompletingProfileActivity extends AppCompatActivity {
                 fetch.setVisibility(View.VISIBLE);
 
             } else {
-                // No explanation needed; request the permission
                 ActivityCompat.requestPermissions(CompletingProfileActivity.this,
                         new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                         MY_PERMISSIONS_REQUEST_READ_ACCESS_COARSE_LOCATION);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
             }
+
+            pb_fetch.setVisibility(View.INVISIBLE);
+            fetch.setVisibility(View.VISIBLE);
+
         } else {
 
             // Permission has already been granted

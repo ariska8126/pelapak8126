@@ -1,6 +1,6 @@
 package com.example.pelapak8126.Models;
 
-public class OwnerLaundry {
+public class Pelapak {
 
     private String ownerKey;
     private String userId;
@@ -18,13 +18,13 @@ public class OwnerLaundry {
     private String ownerPhoto;
     private String laundryPhoto;
 
-    public OwnerLaundry() {
+    public Pelapak() {
     }
 
-    public OwnerLaundry(String userId, String namaLaundry, String alamat, String phone,
-                        double latitude, double longitude, Float rate,
-                        String statusJemput, String statusBuka, String ownerEmail,
-                        String ownerName, String ownerPhoto, String laundryPhoto) {
+    public Pelapak(String userId, String namaLaundry, String alamat, String phone,
+                   double latitude, double longitude, Float rate,
+                   String statusJemput, String statusBuka, String ownerEmail,
+                   String ownerName, String ownerPhoto, String laundryPhoto) {
         this.userId = userId;
         this.namaLaundry = namaLaundry;
         this.alamat = alamat;

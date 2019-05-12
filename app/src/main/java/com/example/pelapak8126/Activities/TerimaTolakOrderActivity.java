@@ -1,8 +1,12 @@
 package com.example.pelapak8126.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,7 +17,6 @@ import com.bumptech.glide.Glide;
 import com.example.pelapak8126.Models.Transaksi;
 import com.example.pelapak8126.R;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -28,37 +31,28 @@ public class TerimaTolakOrderActivity extends AppCompatActivity {
     Button btn_terima, btn_tolak;
     ImageView imgv_photoGuest;
 
-    //saveToDB
     String namaPelapak, photoGuest, longitudeLaundry, latitudeLaundry, longitudeGuest,
             latitudeGuest, namaGuest, idGuest, idLaundry, setrika, antarJemput,
             deskripsi, paketLayanan, transKey, photoPelapak, alamatPelapak, namaLaundry, timeStamp;
-    Float berat;
-    int biaya;
-    String proses, statusBayar;
+    String proses;
 
-    DatabaseReference postReference, deleteReference, reqordReff;
-    FirebaseUser user;
+    DatabaseReference postReference, requestRef;
+
+    AlertDialog.Builder dialog;
+    LayoutInflater inflater;
+    View dialogView;
+
+    String googleMap = "com.google.android.apps.maps";
+    Uri gmmIntentUri;
+    Intent mapIntent;
+    String tujuan;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_terima_tolak_order);
 
-        //init view
-        tv_desc = findViewById(R.id.tv_deskripsi_rro);
-        tv_layanan = findViewById(R.id.tv_pakat_layanan_rro);
-        tv_nama_guest = findViewById(R.id.tv_namaGuest_rro);
-        tv_timeStamp= findViewById(R.id.tv_time_in_rro);
-        tv_antarJemput = findViewById(R.id.tv_antarJemput_rro);
-        tv_setrika = findViewById(R.id.tv_setrika_rro);
-        tv_alamat = findViewById(R.id.tv_alamat_rro);
-
-        btn_terima = findViewById(R.id.btn_yes_tto);
-        btn_tolak = findViewById(R.id.btn_no_tto);
-
-        imgv_photoGuest = findViewById(R.id.imgv_photoGuest_rro);
-
-        //get intent
         transKey = getIntent().getExtras().getString("requestOrderKey");
         namaPelapak = getIntent().getExtras().getString("namaPelapak");
         photoGuest = getIntent().getExtras().getString("photoGuest");
@@ -78,6 +72,24 @@ public class TerimaTolakOrderActivity extends AppCompatActivity {
         namaLaundry = getIntent().getExtras().getString("namaLaundry");
         timeStamp = getIntent().getExtras().getString("timeStamp");
 
+        postReference = FirebaseDatabase.getInstance()
+                .getReference("Transaksi");
+        requestRef = FirebaseDatabase.getInstance()
+                .getReference("RequestOrder").child(transKey);
+
+        tv_desc = findViewById(R.id.tv_deskripsi_rro);
+        tv_layanan = findViewById(R.id.tv_pakat_layanan_rro);
+        tv_nama_guest = findViewById(R.id.tv_namaGuest_rro);
+        tv_timeStamp= findViewById(R.id.tv_time_in_rro);
+        tv_antarJemput = findViewById(R.id.tv_antarJemput_rro);
+        tv_setrika = findViewById(R.id.tv_setrika_rro);
+        tv_alamat = findViewById(R.id.tv_alamat_rro);
+
+        btn_terima = findViewById(R.id.btn_yes_tto);
+        btn_tolak = findViewById(R.id.btn_no_tto);
+
+        imgv_photoGuest = findViewById(R.id.imgv_photoGuest_rro);
+
         //set value
         proses = "Masuk Antrian";
 
@@ -90,14 +102,10 @@ public class TerimaTolakOrderActivity extends AppCompatActivity {
         tv_timeStamp.setText(timeStamp);
         Glide.with(TerimaTolakOrderActivity.this).load(photoGuest).into(imgv_photoGuest);
 
-        //on click
         btn_tolak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reqordReff = FirebaseDatabase.getInstance()
-                        .getReference("RequestOrder").child(transKey);
-                reqordReff.child("status").setValue("DI Tolak");
-
+                requestRef.child("status").setValue("Di Tolak");
                 finish();
             }
         });
@@ -105,20 +113,21 @@ public class TerimaTolakOrderActivity extends AppCompatActivity {
         btn_terima.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //revisi
+
+                if (antarJemput.equals("Ya")){
+
+                    requestRef.child("status").setValue("Menunggu Dijemput");
+                    dialogForm();
+                }
+                else {
                 Transaksi transaksi = new Transaksi(namaPelapak,photoGuest,longitudeLaundry,
                         latitudeLaundry,longitudeGuest,latitudeGuest, namaGuest,idGuest,idLaundry,
                         setrika,antarJemput,deskripsi,paketLayanan,transKey,photoPelapak,
                         alamatPelapak,namaLaundry,getCurrentTimeStamp(),proses);
 
                 postToDatabase(transaksi);
-
-                //set save to database
-                deleteReference = FirebaseDatabase.getInstance()
-                        .getReference("RequestOrder").child(transKey);
-                deleteReference.removeValue();
-
-
+                    updateUI();
+                }
             }
         });
 
@@ -148,10 +157,6 @@ public class TerimaTolakOrderActivity extends AppCompatActivity {
 
     private void postToDatabase(Transaksi transaksi) {
 
-        //Firebase
-        postReference = FirebaseDatabase.getInstance()
-                .getReference("Transaksi");
-
         postReference.child(transKey).setValue(transaksi).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -171,5 +176,52 @@ public class TerimaTolakOrderActivity extends AppCompatActivity {
     private void showMessage(String s) {
 
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+    }
+
+    //modif v1
+    private void dialogForm(){
+
+        dialog = new AlertDialog.Builder(TerimaTolakOrderActivity.this);
+        inflater = getLayoutInflater();
+        dialogView = inflater.inflate(R.layout.popup_navigate, null);
+        dialog.setView(dialogView);
+        dialog.setCancelable(true);
+
+        dialog.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                requestRef.child("status").setValue("Sedang Di Jemput");
+                navigateAnjem();
+                updateUI();
+            }
+        });
+
+        dialog.setNegativeButton("Nanti", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                updateUI();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void navigateAnjem(){
+
+        tujuan = latitudeGuest+", "+longitudeGuest;
+
+        gmmIntentUri = Uri.parse("google.navigation:q="+tujuan);
+        mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage(googleMap);
+
+        if (mapIntent.resolveActivity(getPackageManager()) != null){
+
+            startActivity(mapIntent);
+        }else {
+
+            Toast.makeText(TerimaTolakOrderActivity.this, "Google Maps Belum Terinstall", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

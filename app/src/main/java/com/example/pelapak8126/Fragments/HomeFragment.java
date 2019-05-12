@@ -133,7 +133,10 @@ public class HomeFragment extends Fragment {
 
                             Long timeStamp = Long.valueOf(requestOrder.getTimeStamp());
                             requestOrder.setTimeStamp(getDate(timeStamp));
-                            if (requestOrder.getStatus().equals("Menunggu Konfirmasi")){
+                            if (requestOrder.getStatus().equals("Menunggu Konfirmasi")
+                                    || requestOrder.getStatus().equals("Menunggu Dijemput")
+                                    || requestOrder.getStatus().equals("Sedang Di Jemput")
+                            ){
 
                                 requestOrderList.add(requestOrder);
                             }

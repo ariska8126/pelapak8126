@@ -48,7 +48,6 @@ public class HomeActivity extends AppCompatActivity
 
     FirebaseUser currentUser;
 
-    //popup
     Dialog popupScreenAddService;
     private EditText edt_nama_layanan, edt_desc, edt_biaya;
     private Button btn_simpan;
@@ -57,7 +56,6 @@ public class HomeActivity extends AppCompatActivity
 
     FloatingActionButton fab, fab_service;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,20 +63,14 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //firebase
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        //init popup
         initPopup();
 
-        //init view
         fab_service = findViewById(R.id.fab2);
         fab = findViewById(R.id.fab);
 
-        //set visibility
         fab_service.setVisibility(INVISIBLE);
-
-        //on click
 
         fab_service.setOnClickListener(new View.OnClickListener() {
             @Override

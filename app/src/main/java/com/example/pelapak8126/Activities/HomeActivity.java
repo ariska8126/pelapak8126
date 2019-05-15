@@ -1,13 +1,20 @@
 package com.example.pelapak8126.Activities;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+
+import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -56,12 +63,20 @@ public class HomeActivity extends AppCompatActivity
 
     FloatingActionButton fab, fab_service;
 
+    AlertDialog.Builder dialog;
+    LayoutInflater inflater;
+    View dialogView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (!amIConnected()){
+            dialogForm();
+        }
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -84,8 +99,6 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
 
-//                Intent chatIntent = new Intent(HomeActivity.this, ChatActivity.class);
-//                startActivity(chatIntent);
                 fab.setVisibility(INVISIBLE);
                 getSupportActionBar().setTitle("Pesan Masuk");
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, new ChatListFragment()).commit();
@@ -107,6 +120,24 @@ public class HomeActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment()).commit();
     }
 
+    private void dialogForm(){
+
+        dialog = new AlertDialog.Builder(HomeActivity.this);
+        inflater = getLayoutInflater();
+        dialogView = inflater.inflate(R.layout.popup_nointernet, null);
+        dialog.setView(dialogView);
+        dialog.setCancelable(true);
+
+        dialog.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        dialog.show();
+    }
+
     private void updateNavHeader() {
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -121,7 +152,6 @@ public class HomeActivity extends AppCompatActivity
         navUsername.setText(currentUser.getDisplayName());
         navUserEmail.setText(currentUser.getEmail());
 
-        //glide to load user image
         Glide.with(this).load(currentUser.getPhotoUrl()).into(navUserPhoto);
 
     }
@@ -136,7 +166,6 @@ public class HomeActivity extends AppCompatActivity
                 Toolbar.LayoutParams.WRAP_CONTENT);
         popupScreenAddService.getWindow().getAttributes().gravity = Gravity.CENTER;
 
-        //pop up widget
         edt_biaya = popupScreenAddService.findViewById(R.id.edt_biayaperkilo_tl);
         edt_desc = popupScreenAddService.findViewById(R.id.edt_desc_tl);
         edt_nama_layanan = popupScreenAddService.findViewById(R.id.edt_nama_layanan_tl);
@@ -146,11 +175,9 @@ public class HomeActivity extends AppCompatActivity
         progressBarSimpan = popupScreenAddService.findViewById(R.id.progressBar_popup_tl);
         progressBarSimpan.setVisibility(View.INVISIBLE);
 
-        //tampilkan foto user
         Glide.with(HomeActivity.this).load(currentUser
                 .getPhotoUrl()).into(imgv_user_photo);
 
-        //add post click listener
         btn_simpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -158,12 +185,10 @@ public class HomeActivity extends AppCompatActivity
                 btn_simpan.setVisibility(View.INVISIBLE);
                 progressBarSimpan.setVisibility(View.VISIBLE);
 
-                //test all input field (title & desc & post img)
                 if (!edt_biaya.getText().toString().isEmpty()
                         && !edt_desc.getText().toString().isEmpty()
                         && !edt_nama_layanan.getText().toString().isEmpty()){
 
-                    //create post to firebase database
                     LaundryService laundryService = new LaundryService(
                             edt_nama_layanan.getText().toString(),
                             edt_desc.getText().toString(),
@@ -171,9 +196,7 @@ public class HomeActivity extends AppCompatActivity
                             currentUser.getUid(),
                             currentUser.getPhotoUrl().toString());
 
-                    //add to firebase
                     addPostFirebaseDatabase(laundryService);
-
 
                 } else{
 
@@ -181,7 +204,6 @@ public class HomeActivity extends AppCompatActivity
                     btn_simpan.setVisibility(View.VISIBLE);
                     progressBarSimpan.setVisibility(View.INVISIBLE);
                 }
-
             }
         });
     }
@@ -191,11 +213,9 @@ public class HomeActivity extends AppCompatActivity
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("LaundryService").push();
 
-        //get post uniqe ID dan update post
         String key = myRef.getKey();
         laundryService.setServiceKey(key);
 
-        //ad post data to firebasedatabase
         myRef.setValue(laundryService).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -318,5 +338,13 @@ public class HomeActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private boolean amIConnected(){
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+        return activeNetworkInfo !=null && activeNetworkInfo.isConnected();
     }
 }

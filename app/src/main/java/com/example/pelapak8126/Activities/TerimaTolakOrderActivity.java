@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,11 +49,17 @@ public class TerimaTolakOrderActivity extends AppCompatActivity {
     Intent mapIntent;
     String tujuan;
 
+    TextView tv_note, tv_biaya, tv_berat, tv_bc1, tv_cost1, tv_sb, tv_sb1, tvbc2, tvcost2;
+    EditText edt_berat, edt_cost, edt_note;
+    Switch sw_statusBayar;
+    String berat, biaya, note, bayaran;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_terima_tolak_order);
+
+        getSupportActionBar().hide();
 
         transKey = getIntent().getExtras().getString("requestOrderKey");
         namaPelapak = getIntent().getExtras().getString("namaPelapak");
@@ -90,6 +98,22 @@ public class TerimaTolakOrderActivity extends AppCompatActivity {
 
         imgv_photoGuest = findViewById(R.id.imgv_photoGuest_rro);
 
+        //if no jemput
+        tv_note = findViewById(R.id.tvnote);
+        tv_biaya = findViewById(R.id.tvcost);
+        tv_berat = findViewById(R.id.tvbc);
+        tv_bc1 = findViewById(R.id.tvbc1);
+        tv_cost1 = findViewById(R.id.tvcost1);
+        tv_sb = findViewById(R.id.tvsbupo);
+        tv_sb1 = findViewById(R.id.tvsb1);
+        tvcost2 = findViewById(R.id.tvcost2);
+        tvbc2 = findViewById(R.id.tvbc2);
+
+        edt_berat = findViewById(R.id.edt_bc_tdo);
+        edt_cost = findViewById(R.id.edt_cost_tdo);
+        edt_note = findViewById(R.id.edt_notePelapak_tto);
+        sw_statusBayar = findViewById(R.id.sw_bayar_tdo);
+
         //set value
         proses = "Masuk Antrian";
 
@@ -110,27 +134,71 @@ public class TerimaTolakOrderActivity extends AppCompatActivity {
             }
         });
 
-        btn_terima.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if (antarJemput.equals("Ya")){
 
-                if (antarJemput.equals("Ya")){
+            tv_note.setVisibility(View.INVISIBLE);
+            tv_biaya.setVisibility(View.INVISIBLE);
+            tv_berat.setVisibility(View.INVISIBLE);
+            tv_bc1.setVisibility(View.INVISIBLE);
+            tv_cost1.setVisibility(View.INVISIBLE);
+            tv_sb.setVisibility(View.INVISIBLE);
+            tv_sb1.setVisibility(View.INVISIBLE);
 
-                    requestRef.child("status").setValue("Menunggu Dijemput");
-                    dialogForm();
+            edt_berat.setVisibility(View.INVISIBLE);
+            edt_cost .setVisibility(View.INVISIBLE);
+            edt_note .setVisibility(View.INVISIBLE);
+            sw_statusBayar .setVisibility(View.INVISIBLE);
+            tvcost2.setVisibility(View.INVISIBLE);
+            tvbc2.setVisibility(View.INVISIBLE);
+
+            btn_terima.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                        requestRef.child("status").setValue("Menunggu Dijemput");
+                        dialogForm();
                 }
-                else {
-                Transaksi transaksi = new Transaksi(namaPelapak,photoGuest,longitudeLaundry,
-                        latitudeLaundry,longitudeGuest,latitudeGuest, namaGuest,idGuest,idLaundry,
-                        setrika,antarJemput,deskripsi,paketLayanan,transKey,photoPelapak,
-                        alamatPelapak,namaLaundry,getCurrentTimeStamp(),proses);
+            });
 
-                postToDatabase(transaksi);
+
+        } else {
+
+            tv_note.setVisibility(View.VISIBLE);
+            tv_biaya.setVisibility(View.VISIBLE);
+            tv_berat.setVisibility(View.VISIBLE);
+            tv_bc1.setVisibility(View.VISIBLE);
+            tv_cost1.setVisibility(View.VISIBLE);
+            tv_sb.setVisibility(View.VISIBLE);
+            tv_sb1.setVisibility(View.VISIBLE);
+            tvcost2.setVisibility(View.VISIBLE);
+            tvbc2.setVisibility(View.VISIBLE);
+
+            edt_berat.setVisibility(View.VISIBLE);
+            edt_cost .setVisibility(View.VISIBLE);
+            edt_note .setVisibility(View.VISIBLE);
+            sw_statusBayar .setVisibility(View.VISIBLE);
+
+            btn_terima.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    berat = edt_berat.getText().toString();
+                    biaya = edt_cost.getText().toString();
+                    note = edt_note.getText().toString();
+                    bayaran = sw_statusBayar.getText().toString();
+
+                    Transaksi transaksi = new Transaksi(namaPelapak,photoGuest,longitudeLaundry,
+                            latitudeLaundry,longitudeGuest,latitudeGuest, namaGuest,idGuest,idLaundry,
+                            setrika,antarJemput,deskripsi,paketLayanan,transKey,photoPelapak,
+                            alamatPelapak,namaLaundry,getCurrentTimeStamp(),proses,
+                            berat, biaya, note, bayaran);
+
+                    postToDatabase(transaksi);
                     updateUI();
-                }
-            }
-        });
+                    requestRef.removeValue();
 
+                }
+            });
+        }
     }
 
     private String getDate(Long timeStamp) {

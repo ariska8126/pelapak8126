@@ -20,10 +20,15 @@ public class Transaksi {
     String alamatPelapak;
     String namaLaundry;
     String timeStamp;
-    Float berat;
-    int biaya;
+    String berat;
+    String biaya;
     String proses;
     String statusBayar;
+    String note;
+
+    public void setNote(String note) {
+        this.note = note;
+    }
 
     public Transaksi() {
     }
@@ -33,7 +38,12 @@ public class Transaksi {
                      String namaGuest, String idGuest, String idLaundry, String setrika,
                      String antarjemput, String deskripsi, String layanan, String transKey,
                      String photoPelapak, String alamatPelapak, String namaLaundry,
-                     String timeStamp, String proses) {
+                     String timeStamp, String proses, String berat, String biaya,
+                     String note, String statusBayar) {
+        this.berat = berat;
+        this.biaya = biaya;
+        this.statusBayar = statusBayar;
+        this.note = note;
         this.namaPelapak = namaPelapak;
         this.photoGuest = photoGuest;
         this.longitudeLaundry = longitudeLaundry;
@@ -53,6 +63,10 @@ public class Transaksi {
         this.namaLaundry = namaLaundry;
         this.timeStamp = timeStamp;
         this.proses = proses;
+    }
+
+    public String getNote() {
+        return note;
     }
 
     public String getNamaPelapak() {
@@ -199,19 +213,19 @@ public class Transaksi {
         this.timeStamp = timeStamp;
     }
 
-    public Float getBerat() {
+    public String getBerat() {
         return berat;
     }
 
-    public void setBerat(Float berat) {
+    public void setBerat(String berat) {
         this.berat = berat;
     }
 
-    public int getBiaya() {
+    public String getBiaya() {
         return biaya;
     }
 
-    public void setBiaya(int biaya) {
+    public void setBiaya(String biaya) {
         this.biaya = biaya;
     }
 

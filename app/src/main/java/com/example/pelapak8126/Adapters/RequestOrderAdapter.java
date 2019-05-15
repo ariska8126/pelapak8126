@@ -15,10 +15,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.pelapak8126.Activities.TambahDetailOrderActivity;
 import com.example.pelapak8126.Activities.TerimaTolakOrderActivity;
 import com.example.pelapak8126.Fragments.HomeFragment;
 import com.example.pelapak8126.Models.RequestOrder;
 import com.example.pelapak8126.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -90,6 +93,10 @@ public class RequestOrderAdapter extends RecyclerView
                     int position = getAdapterPosition();
                     String status = mData.get(position).getStatus().toString();
 
+                    DatabaseReference requestRef;
+                    requestRef = FirebaseDatabase.getInstance()
+                            .getReference("RequestOrder").child(mData.get(position).getOrderKey());
+
                     if (status.equals("Menunggu Konfirmasi")){
 
                         Intent tetoOrder = new Intent(mContext, TerimaTolakOrderActivity.class);
@@ -116,11 +123,17 @@ public class RequestOrderAdapter extends RecyclerView
 
                         mContext.startActivity(tetoOrder);
 
-                    } else {
+                    } else if (status.equals("Menunggu Dijemput")){
                         String longitudeGuest = mData.get(position).getLongitudeGuest();
                         String latitudeGuest = mData.get(position).getLatitudeGuest();
 
+                        requestRef.child("status").setValue("Sedang Di Jemput");
                         navigate(longitudeGuest, latitudeGuest);
+                    } else if (status.equals("Sedang Di Jemput")){
+
+                        Intent addDetail = new Intent(mContext, TambahDetailOrderActivity.class);
+                        addDetail.putExtra("transkey", mData.get(position).getOrderKey());
+                        mContext.startActivity(addDetail);
                     }
                 }
             });

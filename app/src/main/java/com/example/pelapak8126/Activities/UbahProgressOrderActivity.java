@@ -1,15 +1,21 @@
 package com.example.pelapak8126.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.example.pelapak8126.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,21 +38,38 @@ public class UbahProgressOrderActivity extends AppCompatActivity {
     private Button btn_cancel, btn_update;
     private TextView tv_orderKey, tv_namaGuest, tv_dateIn, tv_layanan;
 
-    private String key, layanan, namaGuest, timeStamp;
+    private String key, layanan, namaGuest;
     private String cuciValue;
 
     FirebaseUser user;
     DatabaseReference transReff;
+
+    AlertDialog.Builder dialog;
+    LayoutInflater inflater;
+    View dialogView;
+
+    String googleMap = "com.google.android.apps.maps";
+    Uri gmmIntentUri;
+    Intent mapIntent;
+    String tujuan, latitudeGuest, longitudeGuest;
+
+    DatabaseReference laundryPelapak;
+    FirebaseDatabase firebaseDatabase;
+    String proses;
+
+    ToggleButton toggleButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ubah_progress_order);
 
-        //get intent value
-        key = getIntent().getExtras().getString("orderKey");
+        getSupportActionBar().hide();
 
-        //init view
+        key = getIntent().getExtras().getString("orderKey");
+        latitudeGuest = getIntent().getExtras().getString(" latitudeG");
+        longitudeGuest = getIntent().getExtras().getString("longitudeG");
+
         tv_orderKey = findViewById(R.id.tv_transKey_upo);
         tv_namaGuest = findViewById(R.id.tv_namaGuest_upo);
         tv_dateIn = findViewById(R.id.tv_dateIN_upo);
@@ -57,9 +80,42 @@ public class UbahProgressOrderActivity extends AppCompatActivity {
 
         rdg_cuci = findViewById(R.id.radioGroup_prosesCuci_upo);
 
-        //firebase
+        toggleButton = findViewById(R.id.tgb_bayran_upo);
+
         user = FirebaseAuth.getInstance().getCurrentUser();
-        transReff = FirebaseDatabase.getInstance().getReference("Transaksi").child(key);
+        transReff = FirebaseDatabase.getInstance().getReference("Transaksi")
+                .child(key);
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        laundryPelapak = firebaseDatabase.getReference("OwnerLaundry").child(user.getUid());
+
+        transReff.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+                proses = dataSnapshot.child("statusBayar").getValue().toString();
+                if (proses.equals("Sudah Dibayar")){
+                    toggleButton.setChecked(true);
+                } else {
+                    toggleButton.setChecked(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (toggleButton.isChecked()){
+                    transReff.child("statusBayar").setValue("Sudah Dibayar");
+                }else {
+                    transReff.child("statusBayar").setValue("Belum Dibayar");
+                }
+            }
+        });
 
         transReff.addValueEventListener(new ValueEventListener() {
             @Override
@@ -80,7 +136,6 @@ public class UbahProgressOrderActivity extends AppCompatActivity {
             }
         });
 
-        //radiogrup init set value
         //onclick
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,9 +143,12 @@ public class UbahProgressOrderActivity extends AppCompatActivity {
 
                 transReff.child("proses").setValue(cuciValue);
 
-                Toast.makeText(UbahProgressOrderActivity.this, "perubahan berhasil di simpan!", Toast.LENGTH_SHORT).show();
-                updateUI();
-
+                if (cuciValue.equals("Selesai")){
+                    dialogForm();
+                } else{
+                    Toast.makeText(UbahProgressOrderActivity.this, "perubahan berhasil di simpan!", Toast.LENGTH_SHORT).show();
+                    updateUI();
+                }
             }
         });
 
@@ -101,6 +159,52 @@ public class UbahProgressOrderActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+    }
+
+    private void dialogForm(){
+
+        dialog = new AlertDialog.Builder(UbahProgressOrderActivity.this);
+        inflater = getLayoutInflater();
+        dialogView = inflater.inflate(R.layout.popup_navigate, null);
+        dialog.setView(dialogView);
+        dialog.setCancelable(true);
+
+        dialog.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                navigateAnjem();
+                updateUI();
+            }
+        });
+
+        dialog.setNegativeButton("Nanti", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                updateUI();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void navigateAnjem(){
+
+        tujuan = latitudeGuest+", "+longitudeGuest;
+
+        gmmIntentUri = Uri.parse("google.navigation:q="+tujuan);
+        mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage(googleMap);
+
+        if (mapIntent.resolveActivity(getPackageManager()) != null){
+
+            startActivity(mapIntent);
+        }else {
+
+            Toast.makeText(UbahProgressOrderActivity.this, "Google Maps Belum Terinstall",
+                    Toast.LENGTH_SHORT).show();
+        }
 
     }
 

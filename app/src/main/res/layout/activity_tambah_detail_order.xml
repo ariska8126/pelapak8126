@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.TambahDetailOrderActivity">
+
+    <TextView
+        android:id="@+id/tvnote"
+        android:layout_width="wrap_content"
+        android:layout_height="41dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:text="note:"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvbc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Berat Cucian:"
+        app:layout_constraintStart_toStartOf="@+id/tvnote"
+        app:layout_constraintTop_toBottomOf="@+id/tvnote" />
+
+    <TextView
+        android:id="@+id/tvcost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Biaya"
+        app:layout_constraintStart_toStartOf="@+id/tvbc"
+        app:layout_constraintTop_toBottomOf="@+id/tvbc" />
+
+    <TextView
+        android:id="@+id/tvbc1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text=":"
+        app:layout_constraintStart_toEndOf="@+id/tvbc"
+        app:layout_constraintTop_toTopOf="@+id/tvbc" />
+
+    <TextView
+        android:id="@+id/tvcost1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=":"
+        app:layout_constraintEnd_toEndOf="@+id/tvbc1"
+        app:layout_constraintTop_toTopOf="@+id/tvcost" />
+
+    <EditText
+        android:id="@+id/edt_bc_tdo"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="@+id/tvbc"
+        app:layout_constraintStart_toEndOf="@+id/tvbc1"
+        app:layout_constraintTop_toTopOf="@+id/tvbc" />
+
+    <EditText
+        android:id="@+id/edt_cost_tdo"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="@+id/tvcost"
+        app:layout_constraintStart_toEndOf="@+id/tvcost2"
+        app:layout_constraintTop_toTopOf="@+id/tvcost"
+        app:layout_constraintVertical_bias="0.423" />
+
+    <TextView
+        android:id="@+id/tvsbupo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Status Bayar"
+        app:layout_constraintStart_toStartOf="@+id/tvcost"
+        app:layout_constraintTop_toBottomOf="@+id/tvcost" />
+
+    <TextView
+        android:id="@+id/tvsb1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=":"
+        app:layout_constraintBottom_toBottomOf="@+id/tvsbupo"
+        app:layout_constraintStart_toStartOf="@+id/tvcost1" />
+
+    <Switch
+        android:id="@+id/sw_bayar_tdo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Belum Dibayar"
+        android:textOff="Belum Dibayar"
+        android:textOn="Sudah Dibayar"
+        app:layout_constraintBottom_toBottomOf="@+id/tvsbupo"
+        app:layout_constraintStart_toEndOf="@+id/tvsb1"
+        app:layout_constraintTop_toTopOf="@+id/tvsbupo" />
+
+    <TextView
+        android:id="@+id/tvbc2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="kg"
+        app:layout_constraintBottom_toBottomOf="@+id/tvbc"
+        app:layout_constraintStart_toEndOf="@+id/edt_bc_tdo"
+        app:layout_constraintTop_toTopOf="@+id/tvbc" />
+
+    <TextView
+        android:id="@+id/tvcost2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Rp."
+        app:layout_constraintBottom_toBottomOf="@+id/tvcost"
+        app:layout_constraintStart_toEndOf="@+id/tvcost1"
+        app:layout_constraintTop_toTopOf="@+id/tvcost" />
+
+    <EditText
+        android:id="@+id/edt_note_tdo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvsbupo"
+        app:layout_constraintTop_toBottomOf="@+id/sw_bayar_tdo" />
+
+    <Button
+        android:id="@+id/btn_submit_tdo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
+        android:text="Submit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

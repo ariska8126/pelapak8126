@@ -16,7 +16,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#0ABFBC"
+            android:background="@color/backgroundgorange900"
             android:theme="@style/Base.CardView"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             >
@@ -44,7 +44,8 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:text="nama"
-                    android:textSize="18sp"
+                    android:textColor="#fff"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imgv_userPhoto_ac"
                     app:layout_constraintTop_toTopOf="parent" />

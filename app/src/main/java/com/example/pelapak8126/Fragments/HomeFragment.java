@@ -136,6 +136,7 @@ public class HomeFragment extends Fragment {
                             if (requestOrder.getStatus().equals("Menunggu Konfirmasi")
                                     || requestOrder.getStatus().equals("Menunggu Dijemput")
                                     || requestOrder.getStatus().equals("Sedang Di Jemput")
+
                             ){
 
                                 requestOrderList.add(requestOrder);
@@ -202,8 +203,6 @@ public class HomeFragment extends Fragment {
 
         toggleButton = requestOrderView.findViewById(R.id.toggleButton);
         tgb_anjem = requestOrderView.findViewById(R.id.tgb_anjem_fh);
-
-//        toggleButtoState = toggleButton.isChecked();
 
         //update buka tutup
         laundryPelapak.addValueEventListener(new ValueEventListener() {

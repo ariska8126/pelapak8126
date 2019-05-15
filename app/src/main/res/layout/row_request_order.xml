@@ -12,13 +12,15 @@
         android:id="@+id/cardView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:cardBackgroundColor="#fff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="#fff">
 
             <TextView
                 android:id="@+id/tv_namaGuest_rro"
@@ -27,6 +29,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="TextView"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,8 +50,8 @@
                 android:layout_marginStart="8dp"
                 android:text="TextView"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/textView"
-                app:layout_constraintTop_toTopOf="@+id/tv_namaGuest_rro" />
+                app:layout_constraintBottom_toBottomOf="@+id/textView"
+                app:layout_constraintStart_toEndOf="@+id/textView" />
 
             <TextView
                 android:id="@+id/tv_desc_rro"
@@ -90,8 +94,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="|"
-                app:layout_constraintStart_toEndOf="@+id/tv_namaGuest_rro"
-                app:layout_constraintTop_toTopOf="@+id/tv_namaGuest_rro" />
+                app:layout_constraintBottom_toBottomOf="@+id/tv_alamat_rro"
+                app:layout_constraintStart_toEndOf="@+id/tv_alamat_rro" />
 
             <TextView
                 android:id="@+id/tv_status_rrr"
